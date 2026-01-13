@@ -4,7 +4,6 @@ from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.enum.text import PP_ALIGN
 from pptx.dml.color import RGBColor
-from pptx.enum.dml import MSO_THEME_COLOR
 from pptx.enum.shapes import MSO_AUTO_SHAPE_TYPE
 
 # ===== 可自定义品牌区 =====
@@ -13,7 +12,7 @@ SUBTITLE = "从“想法/素材”到“成片/成稿”的工业级营销内容
 DATE = "2026-01-13"
 VERSION = "v1.0"
 AUTHOR = "yy1 / 深思"
-LOGO_PATH = "assets/logo.png"  # 请将公司LOGO保存为 assets/logo.png
+LOGO_PATH = "assets/logo.png"  # 将公司LOGO保存为 assets/logo.png
 BRAND_FONT = "Microsoft YaHei"
 PRIMARY = RGBColor(16, 54, 107)   # 主色深蓝
 ACCENT = RGBColor(0, 160, 233)    # 强调色蓝
@@ -44,7 +43,7 @@ def add_logo(slide):
     try:
         slide.shapes.add_picture(LOGO_PATH, Inches(9.0), Inches(0.2), height=Inches(0.5))
     except Exception:
-        # 当未提供 LOGO 时，忽略
+        # 未提供 LOGO 时忽略
         pass
 
 def add_title(slide, title):
@@ -64,18 +63,14 @@ def add_bullets(slide, items, left=Inches(0.8), top=Inches(1.8), width=Inches(8.
     txBox = slide.shapes.add_textbox(left, top, width, height)
     tf = txBox.text_frame
     tf.clear()
-
-    # 为了首段也能正常显示，先创建一个空段落
-    first_p = tf.paragraphs[0]
-    first_p.text = ""
-
+    # 首段初始化
+    tf.paragraphs[0].text = ""
     def add_item(text, level=0):
         p = tf.add_paragraph()
         p.level = level
         run = p.add_run()
         run.text = text
         set_text_style(run, size=18 if level == 0 else 16, color=TEXT_COLOR)
-
     for item in items:
         if isinstance(item, tuple):
             add_item(item[0], item[1])
@@ -181,7 +176,7 @@ def build_deck():
     # 7 技术架构与多模型生态 + 协议
     add_simple_slide(prs, 7, "技术架构与多模型生态 + 协议", [
         "Agent中枢：任务编排、意图识别、技能路由、版本管理",
-        "语��与推理：自研工业LLM、gemini3-pro、GPT5（规划）、deepseek",
+        "语言与推理：自研工业LLM、gemini3-pro、GPT5（规划）、deepseek",
         "视觉/视频：可灵、火山、Veo3、sora2、通义万相、Vidu、海螺",
         "协议：Function Call、MCP（Model Context Protocol）、A2A（Agent-to-Agent）",
         "适配层：能力声明、成本/时延画像、质量档案、故障转移/降级",
@@ -211,7 +206,7 @@ def build_deck():
         "预约“从Brief到导出”的实机演示",
         "选定试点产品线与素材，一周交付首批物料",
         "提供品牌手册/LOGO/色板，生成品牌化模板",
-        "如需我直接上传PPTX至GitHub，请提供 owner/repo 与目标分支",
+        "如需自动上传至 GitHub，请使用下方 Actions 工作流",
     ])
 
     return prs
